@@ -67,6 +67,12 @@
  */
 #define SDL_MAIN_NEEDED
 
+#elif defined(__MOJO__)
+/* On Mojo SDL provides a MojoMain() entry point that creates an application
+   delegate which eventually calls SDL_main().
+ */
+#define SDL_MAIN_NEEDED
+
 #elif defined(__NACL__)
 /* On NACL we use ppapi_simple to set up the application helper code,
    then wait for the first PSE_INSTANCE_DIDCHANGEVIEW event before 
