@@ -25,6 +25,8 @@
 /* Include the SDL main definition header */
 #include "SDL_main.h"
 
+#include "../../video/mojo/SDL_mojoasyncwaiter.h"
+#include "../../video/mojo/SDL_mojovideo.h"
 #include "SDL_mojo_main.h"
 
 namespace sdl {
@@ -35,17 +37,19 @@ SdlAppDelegate::SdlAppDelegate()
 }
 
 void 
-SdlAppDelegate::Initialize(mojo::ApplicationImpl* app) 
+SdlAppDelegate::Initialize(mojo::ApplicationImpl* app)
 {
+    Mojo_SetApplicationImpl(app);
+
     /* TODO(jaween): Forward the appropriate argc and argv */
     SDL_SetMainReady();
     SDL_main(0, NULL);
-} 
+}
 
 } /* namespace sdl */
 
-MojoResult 
-MojoMain(MojoHandle application_request) 
+MojoResult
+MojoMain(MojoHandle application_request)
 {
     mojo::ApplicationRunner runner(new sdl::SdlAppDelegate);
     return runner.Run(application_request);

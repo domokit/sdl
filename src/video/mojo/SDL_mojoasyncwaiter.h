@@ -18,34 +18,24 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
-#ifndef _SDL_mojomain_h
-#define _SDL_mojomain_h
+#ifndef _SDL_mojoasyncwaiter_h
+#define _SDL_mojoasyncwaiter_h
 
-#include "base/bind.h"
-#include "mojo/common/binding_set.h"
-#include "mojo/public/c/system/main.h"
-#include "mojo/public/cpp/application/application_delegate.h"
-#include "mojo/public/cpp/application/application_impl.h"
-#include "mojo/public/cpp/application/application_runner.h"
-#include "mojo/public/cpp/application/interface_factory.h"
-#include "mojo/services/native_viewport/public/interfaces/native_viewport.mojom.h"
+#include "mojo/public/c/system/types.h"
+
+struct MojoAsyncWaiter;
 
 namespace sdl {
 
-class SdlAppDelegate : public mojo::ApplicationDelegate
-{
-  public:
-    SdlAppDelegate();
-    virtual void Initialize(mojo::ApplicationImpl* app) override;
+extern MojoResult Mojo_BlockOnHandle();
 
-  private:
-    mojo::NativeViewportPtr viewport_;
-    
-    DISALLOW_COPY_AND_ASSIGN(SdlAppDelegate);
-};
+namespace internal {
 
+extern const MojoAsyncWaiter kSdlAsyncWaiter;
+
+} /* namespace internal */
 } /* namespace sdl */
 
-#endif /* _SDL_mojomain_h */
+#endif  /* _SDL_mojoasyncwaiter_h */
 
 /* vi: set ts=4 sw=4 expandtab: */

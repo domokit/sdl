@@ -18,34 +18,32 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
-#ifndef _SDL_mojomain_h
-#define _SDL_mojomain_h
+#include "../../SDL_internal.h"
 
-#include "base/bind.h"
+#ifndef _SDL_mojowindow_h
+#define _SDL_mojowindow_h
+
+#include "../SDL_sysvideo.h"
+
 #include "mojo/common/binding_set.h"
-#include "mojo/public/c/system/main.h"
-#include "mojo/public/cpp/application/application_delegate.h"
-#include "mojo/public/cpp/application/application_impl.h"
-#include "mojo/public/cpp/application/application_runner.h"
-#include "mojo/public/cpp/application/interface_factory.h"
 #include "mojo/services/native_viewport/public/interfaces/native_viewport.mojom.h"
 
 namespace sdl {
 
-class SdlAppDelegate : public mojo::ApplicationDelegate
-{
-  public:
-    SdlAppDelegate();
-    virtual void Initialize(mojo::ApplicationImpl* app) override;
+/* SDL function implementations */
+extern int Mojo_CreateWindow(_THIS, SDL_Window * window);
+extern void Mojo_SetWindowSize(_THIS, SDL_Window * window);
+extern void Mojo_DestroyWindow(_THIS, SDL_Window * window);
 
-  private:
-    mojo::NativeViewportPtr viewport_;
-    
-    DISALLOW_COPY_AND_ASSIGN(SdlAppDelegate);
-};
+/* Internal helper functions */
+extern void Mojo_SetApplicationImpl(
+      mojo::ApplicationImpl* passed_application_impl);
+extern void Mojo_GetContextProvider(mojo::ContextProviderPtr* context_provider);
+extern void Mojo_OnMetricsChanged(mojo::ViewportMetricsPtr metrics);
+extern int Mojo_GetWindowId();
 
 } /* namespace sdl */
 
-#endif /* _SDL_mojomain_h */
+#endif /* _SDL_mojowindow_h */
 
 /* vi: set ts=4 sw=4 expandtab: */

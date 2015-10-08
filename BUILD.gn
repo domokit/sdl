@@ -1,13 +1,14 @@
 config("configuration") {
   include_dirs = [ "include" ]
   cflags = [ "-w" ]
-  defines = [ "__MOJO__" ]
+  defines = [ "__MOJO__", "SDL_VIDEO_MOJO_DRIVER" ]
 }
 
 static_library("sdl") {
   configs += [ ":configuration" ]
 
   sources = [
+    "include/SDL.h",
     "include/begin_code.h",
     "include/close_code.h",
     "include/SDL_assert.h",
@@ -191,6 +192,9 @@ static_library("sdl") {
     "src/video/SDL_stretch.c",
     "src/video/SDL_surface.c",
     "src/video/SDL_video.c",
+    "src/video/mojo/SDL_mojoasyncwaiter.cc",
+    "src/video/mojo/SDL_mojowindow.cc",
+    "src/video/mojo/SDL_mojovideo.cc",
   ]
 
    deps = [
@@ -200,5 +204,6 @@ static_library("sdl") {
     "//mojo/public/cpp/bindings",
     "//mojo/public/cpp/environment",
     "//mojo/public/cpp/utility",
+    "//mojo/services/native_viewport/public/interfaces",
   ]
 }

@@ -27,6 +27,10 @@
 #include "SDL_shape.h"
 #include "SDL_thread.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* The SDL video driver */
 
 typedef struct SDL_WindowShaper SDL_WindowShaper;
@@ -383,6 +387,9 @@ extern VideoBootStrap UIKIT_bootstrap;
 #if SDL_VIDEO_DRIVER_ANDROID
 extern VideoBootStrap Android_bootstrap;
 #endif
+#if SDL_VIDEO_DRIVER_MOJO
+extern VideoBootStrap Mojo_bootstrap;
+#endif
 #if SDL_VIDEO_DRIVER_PSP
 extern VideoBootStrap PSP_bootstrap;
 #endif
@@ -429,6 +436,10 @@ extern SDL_Window * SDL_GetFocusWindow(void);
 extern SDL_bool SDL_ShouldAllowTopmost(void);
 
 extern float SDL_ComputeDiagonalDPI(int hpix, int vpix, float hinches, float vinches);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _SDL_sysvideo_h */
 
