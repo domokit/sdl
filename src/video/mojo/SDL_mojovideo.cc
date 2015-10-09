@@ -30,6 +30,7 @@
 #include "../../events/SDL_events_c.h"
 
 #include "SDL_mojoasyncwaiter.h"
+#include "SDL_mojoevents_c.h"
 #include "SDL_mojoopengles.h"
 #include "SDL_mojovideo.h"
 #include "SDL_mojowindow.h"
@@ -74,6 +75,8 @@ Mojo_CreateDevice(int devindex)
     /* Set the function pointers */
     device->VideoInit = Mojo_VideoInit;
     device->VideoQuit = Mojo_VideoQuit;
+    device->PumpEvents = sdl::Mojo_PumpEvents;
+
 
     device->CreateWindow = sdl::Mojo_CreateWindow;
     device->SetWindowSize = sdl::Mojo_SetWindowSize;
@@ -115,7 +118,65 @@ Mojo_VideoInit(_THIS)
 void
 Mojo_VideoQuit(_THIS)
 {
-    /* Nothing to do */
+    Mojo_DeallocateEvents();
+}
+
+void
+Mojo_HandleInputEvent(const mojo::Event& mojo_event)
+{
+    int button;
+    if (mojo_event.flags & mojo::EVENT_FLAGS_LEFT_MOUSE_BUTTON) {
+        button = SDL_BUTTON_LEFT;
+    } else if (mojo_event.flags & mojo::EVENT_FLAGS_RIGHT_MOUSE_BUTTON) {
+        button = SDL_BUTTON_RIGHT;
+    } else if (mojo_event.flags & mojo::EVENT_FLAGS_MIDDLE_MOUSE_BUTTON) {
+        button = SDL_BUTTON_MIDDLE;
+    } else {
+        /* Unknown mouse button */
+        return;
+    }
+
+    /* TODO(jaween): Use mojo_event.pointer_data->kind to determine when to
+     * send SDL_TouchFingerEvents 
+     */
+    SDL_Event* event = Mojo_RetrieveEvent();
+    switch (mojo_event.action) {
+        case mojo::EVENT_TYPE_POINTER_DOWN:
+            event->type = SDL_MOUSEBUTTONDOWN;
+            event->button.windowID = Mojo_GetWindowId();
+            event->button.which = 0;
+            event->button.button = button;
+            event->button.state = SDL_PRESSED;
+            event->button.x = mojo_event.pointer_data->x;
+            event->button.y = mojo_event.pointer_data->y;
+            break;
+        case mojo::EVENT_TYPE_POINTER_MOVE:
+            event->type = SDL_MOUSEMOTION;
+            event->motion.windowID = Mojo_GetWindowId();
+            event->motion.which = 0;
+            event->motion.x = mojo_event.pointer_data->x;
+            event->motion.y = mojo_event.pointer_data->y;
+            break;
+        case mojo::EVENT_TYPE_POINTER_UP:
+            event->type = SDL_MOUSEBUTTONUP;
+            event->button.windowID = Mojo_GetWindowId();
+            event->button.which = 0;
+            event->button.button = button;
+            event->button.state = SDL_RELEASED;
+            event->button.x = mojo_event.pointer_data->x;
+            event->button.y = mojo_event.pointer_data->y;
+            break;
+        case mojo::EVENT_TYPE_UNKNOWN:
+        case mojo::EVENT_TYPE_KEY_PRESSED:
+            /* TODO(jaween): Keyboard input */
+        case mojo::EVENT_TYPE_KEY_RELEASED:
+        case mojo::EVENT_TYPE_POINTER_CANCEL:
+            /* SDL doesn't support cancel */
+        default:
+            Mojo_RelinquishEvent(event);
+            return;
+    }
+    Mojo_EnqueueEvent(event);
 }
 
 } /* namespace sdl */

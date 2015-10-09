@@ -31,19 +31,36 @@
 
 namespace sdl {
 
-SdlAppDelegate::SdlAppDelegate()
-{
-    /* Needed for MOJO_DISALLOW_COPY_AND_ASSIGN */
-}
+SdlAppDelegate::SdlAppDelegate() : dispatcher_binding_(this) {}
 
-void 
+void
 SdlAppDelegate::Initialize(mojo::ApplicationImpl* app)
 {
     Mojo_SetApplicationImpl(app);
+    SetEventDispatcher();
 
     /* TODO(jaween): Forward the appropriate argc and argv */
     SDL_SetMainReady();
     SDL_main(0, NULL);
+}
+
+void
+SdlAppDelegate::OnEvent(mojo::EventPtr event,
+                  const mojo::Callback<void()>& callback)
+{
+    assert(event);
+    if (event->pointer_data.get()) {
+        Mojo_HandleInputEvent(*event);
+    }
+    callback.Run();
+}
+
+void
+SdlAppDelegate::SetEventDispatcher()
+{
+    mojo::NativeViewportEventDispatcherPtr ptr;
+    dispatcher_binding_.Bind(GetProxy(&ptr));
+    viewport_->SetEventDispatcher(ptr.Pass());
 }
 
 } /* namespace sdl */

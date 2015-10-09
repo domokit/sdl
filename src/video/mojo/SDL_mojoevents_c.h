@@ -20,29 +20,25 @@
 */
 #include "../../SDL_internal.h"
 
-#ifndef _SDL_mojovideo_h
-#define _SDL_mojovideo_h
+#ifndef _SDL_mojoevents_c_h
+#define _SDL_mojoevents_c_h
 
-#include "../../events/SDL_events_c.h"
-#include "../SDL_sysvideo.h"
-
-#include "../../main/mojo/SDL_mojo_main.h"
-#include "SDL_mojowindow.h"
-
-#include "mojo/services/native_viewport/public/interfaces/native_viewport.mojom.h"
+#include "SDL_events.h"
 
 namespace sdl {
 
+/* SDL function implementations */
+void Mojo_PumpEvents(_THIS);
+
 /* Internal helper functions */
-extern void Mojo_SetViewport(mojo::InterfacePtr<mojo::NativeViewport>&& viewport);
-extern void Mojo_SetAppDelegate(sdl::SdlAppDelegate* app_delegate);
-extern void Mojo_HandleInputEvent(const mojo::Event& event);
-static void Mojo_HandleKeyboardEvent(const mojo::Event& mojo_event);
-static void Mojo_HandlePointerEvent(const mojo::Event& mojo_event);
-static void Mojo_CreateKeySym(SDL_Event* event, const mojo::KeyData& key_data);
+void Mojo_EnqueueEvent(SDL_Event* event);
+SDL_Event* Mojo_RetrieveEvent();
+void Mojo_RelinquishEvent(SDL_Event* event);
+void Mojo_DeallocateEvents();
+
 
 } /* namespace sdl */
 
-#endif /* _SDL_mojovideo_h */
+#endif /* _SDL_mojoevents_c_h */
 
 /* vi: set ts=4 sw=4 expandtab: */

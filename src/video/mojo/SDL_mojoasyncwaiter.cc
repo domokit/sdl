@@ -112,11 +112,13 @@ AsyncWait(MojoHandle handle,
     /* |run_loop_handler| is destroyed either when the handle is ready or if
      * CancelWait is invoked.
      */
+
+     /* TODO(jaween): A fixed deadline is needed to ensure SDL doesn't block
+      * forever, but it also breaks window resizing events.
+      */
     mojo::RunLoop* run_loop = mojo::RunLoop::current();
     assert(run_loop);
-    MojoDeadline fixed_deadline = 1000000;  /* 1 second */
-    run_loop->AddHandler(run_loop_handler, mojo::Handle(handle), signals,
-        fixed_deadline);
+    run_loop->AddHandler(run_loop_handler, mojo::Handle(handle), signals, deadline);
 
     return reinterpret_cast<MojoAsyncWaitID>(run_loop_handler);
 }

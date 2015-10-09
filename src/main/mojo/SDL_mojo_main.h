@@ -32,15 +32,20 @@
 
 namespace sdl {
 
-class SdlAppDelegate : public mojo::ApplicationDelegate
+class SdlAppDelegate : public mojo::ApplicationDelegate,
+                       public mojo::NativeViewportEventDispatcher
 {
   public:
     SdlAppDelegate();
     virtual void Initialize(mojo::ApplicationImpl* app) override;
+    virtual void OnEvent(mojo::EventPtr event,
+                   const mojo::Callback<void()>& callback) override;
 
   private:
+    void SetEventDispatcher();
     mojo::NativeViewportPtr viewport_;
-    
+    mojo::Binding<mojo::NativeViewportEventDispatcher> dispatcher_binding_;
+
     DISALLOW_COPY_AND_ASSIGN(SdlAppDelegate);
 };
 

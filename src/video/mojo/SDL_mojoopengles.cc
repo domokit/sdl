@@ -40,7 +40,7 @@ static sdl::SdlAppDelegate* app_delegate;
 static mojo::ContextProviderPtr context_provider;
 static MGLContext mgl_context = MGL_NO_CONTEXT;
 
-int 
+int
 Mojo_GLES2_LoadLibrary(_THIS, const char* path)
 {
     /* OpenGL is ready */
@@ -53,29 +53,29 @@ Mojo_GLES2_CreateContext(_THIS, SDL_Window * window)
     Mojo_GetContextProvider(&context_provider);
     context_provider.Bind(context_provider.PassInterface(), &sdl::internal::kSdlAsyncWaiter);
 
-    context_provider->Create(nullptr, 
+    context_provider->Create(nullptr,
                           [](mojo::CommandBufferPtr command_buffer) {
-                                Mojo_ContextCreated(command_buffer.Pass());
+                             Mojo_ContextCreated(command_buffer.Pass());
                           });
     sdl::Mojo_BlockOnHandle();
 
     return reinterpret_cast<SDL_GLContext>(&mgl_context);
 }
 
-int 
+int
 Mojo_GLES2_MakeCurrent(_THIS, SDL_Window * window, SDL_GLContext context)
 {
     MGLMakeCurrent(*reinterpret_cast<MGLContext*>(context));
-    return 0; 
+    return 0;
 }
 
-void 
+void
 Mojo_GLES2_SwapWindow(_THIS, SDL_Window * window)
 {
     MGLSwapBuffers();
 }
 
-void 
+void
 Mojo_GLES2_DeleteContext(_THIS, SDL_GLContext context)
 {
     MGLDestroyContext(*reinterpret_cast<MGLContext*>(context));
@@ -101,12 +101,12 @@ Mojo_ContextCreated(mojo::CommandBufferPtr command_buffer)
     mgl_context = MGLCreateContext(
         MGL_API_VERSION_GLES2,
         command_buffer.PassInterface().PassHandle().release().value(),
-        MGL_NO_CONTEXT, &Mojo_ContextLostThunk, app_delegate, 
-        &sdl::internal::kSdlAsyncWaiter);
+        MGL_NO_CONTEXT, &Mojo_ContextLostThunk, app_delegate,
+        mojo::Environment::GetDefaultAsyncWaiter());
     MGLMakeCurrent(mgl_context);
 }
 
-void 
+void
 Mojo_ContextLostThunk(void* closure)
 {
     /* TODO(jaween): Replace with SDL_LogMessage() calls */

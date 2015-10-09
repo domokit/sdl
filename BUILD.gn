@@ -110,12 +110,13 @@ static_library("sdl") {
     "src/video/SDL_surface.c",
     "src/video/SDL_video.c",
     "src/video/mojo/SDL_mojoasyncwaiter.cc",
+    "src/video/mojo/SDL_mojoevents.cc",
     "src/video/mojo/SDL_mojoopengles.cc",
     "src/video/mojo/SDL_mojowindow.cc",
     "src/video/mojo/SDL_mojovideo.cc",
   ]
 
-   deps = [
+  deps = [
     "//base",
     "//mojo/common",
     "//mojo/public/c/gpu",

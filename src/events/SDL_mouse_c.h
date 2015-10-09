@@ -23,6 +23,10 @@
 #ifndef _SDL_mouse_c_h
 #define _SDL_mouse_c_h
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "SDL_mouse.h"
 
 typedef Uint32 SDL_MouseID;
@@ -124,6 +128,10 @@ extern int SDL_SendMouseWheel(SDL_Window * window, SDL_MouseID mouseID, int x, i
 
 /* Shutdown the mouse subsystem */
 extern void SDL_MouseQuit(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _SDL_mouse_c_h */
 

@@ -25,8 +25,13 @@
 #include "../SDL_sysvideo.h"
 
 #include "SDL_mojoasyncwaiter.h"
+#include "SDL_mojoevents_c.h"
+#include "SDL_mojoopengles.h"
 #include "SDL_mojovideo.h"
 #include "SDL_mojowindow.h"
+
+#include "mojo/public/c/gpu/MGL/mgl.h"
+#include "mojo/public/c/gpu/MGL/mgl_onscreen.h"
 
 namespace sdl {
 
@@ -72,7 +77,7 @@ Mojo_CreateWindow(_THIS, SDL_Window * window)
 void
 Mojo_SetWindowSize(_THIS, SDL_Window * window)
 {
-    /* TODO(jaween): MGLResizeSurface(window->w, window->h); */
+    MGLResizeSurface(window->w, window->h);
 }
 
 void
@@ -95,9 +100,22 @@ Mojo_GetContextProvider(mojo::ContextProviderPtr* context_provider)
 }
 
 void
-Mojo_OnMetricsChanged(mojo::ViewportMetricsPtr metrics) 
+Mojo_OnMetricsChanged(mojo::ViewportMetricsPtr metrics)
 {
-    /* TODO(jaween): SDL events */
+    assert(metrics);
+    viewport->RequestMetrics(base::Bind(&Mojo_OnMetricsChanged));
+    
+    if (Mojo_HasOpenGLContext()) {
+        MGLResizeSurface(metrics->size->width, metrics->size->height);
+
+        SDL_Event* event = Mojo_RetrieveEvent();
+        event->type = SDL_WINDOWEVENT;
+        event->window.windowID = window_id;
+        event->window.event = SDL_WINDOWEVENT_RESIZED;
+        event->window.data1 = metrics->size->width;
+        event->window.data2 = metrics->size->height;
+        Mojo_EnqueueEvent(event);
+    }
 }
 
 int
