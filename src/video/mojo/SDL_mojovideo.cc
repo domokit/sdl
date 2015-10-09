@@ -30,6 +30,7 @@
 #include "../../events/SDL_events_c.h"
 
 #include "SDL_mojoasyncwaiter.h"
+#include "SDL_mojoopengles.h"
 #include "SDL_mojovideo.h"
 #include "SDL_mojowindow.h"
 
@@ -79,6 +80,13 @@ Mojo_CreateDevice(int devindex)
     device->DestroyWindow = sdl::Mojo_DestroyWindow;
 
     device->free = Mojo_DeleteDevice;
+
+    /* GL pointers */
+    device->GL_LoadLibrary = sdl::Mojo_GLES2_LoadLibrary;
+    device->GL_CreateContext = sdl::Mojo_GLES2_CreateContext;
+    device->GL_MakeCurrent = sdl::Mojo_GLES2_MakeCurrent;
+    device->GL_SwapWindow = sdl::Mojo_GLES2_SwapWindow;
+    device->GL_DeleteContext = sdl::Mojo_GLES2_DeleteContext;
 
     return device;
 }

@@ -89,7 +89,13 @@ Mojo_SetApplicationImpl(mojo::ApplicationImpl* passed_application_impl)
 }
 
 void
-Mojo_OnMetricsChanged(mojo::ViewportMetricsPtr metrics)
+Mojo_GetContextProvider(mojo::ContextProviderPtr* context_provider)
+{
+    viewport->GetContextProvider(GetProxy(context_provider));
+}
+
+void
+Mojo_OnMetricsChanged(mojo::ViewportMetricsPtr metrics) 
 {
     /* TODO(jaween): SDL events */
 }
