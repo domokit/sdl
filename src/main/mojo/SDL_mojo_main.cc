@@ -37,7 +37,7 @@ void
 SdlAppDelegate::Initialize(mojo::ApplicationImpl* app)
 {
     Mojo_SetApplicationImpl(app);
-    SetEventDispatcher();
+    Mojo_SetEventDispatcher(&dispatcher_binding_);
 
     /* TODO(jaween): Forward the appropriate argc and argv */
     SDL_SetMainReady();
@@ -53,14 +53,6 @@ SdlAppDelegate::OnEvent(mojo::EventPtr event,
         Mojo_HandleInputEvent(*event);
     }
     callback.Run();
-}
-
-void
-SdlAppDelegate::SetEventDispatcher()
-{
-    mojo::NativeViewportEventDispatcherPtr ptr;
-    dispatcher_binding_.Bind(GetProxy(&ptr));
-    viewport_->SetEventDispatcher(ptr.Pass());
 }
 
 } /* namespace sdl */

@@ -42,8 +42,6 @@ class SdlAppDelegate : public mojo::ApplicationDelegate,
                    const mojo::Callback<void()>& callback) override;
 
   private:
-    void SetEventDispatcher();
-    mojo::NativeViewportPtr viewport_;
     mojo::Binding<mojo::NativeViewportEventDispatcher> dispatcher_binding_;
 
     DISALLOW_COPY_AND_ASSIGN(SdlAppDelegate);

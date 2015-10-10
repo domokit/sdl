@@ -37,7 +37,9 @@ extern void Mojo_DestroyWindow(_THIS, SDL_Window * window);
 
 /* Internal helper functions */
 extern void Mojo_SetApplicationImpl(
-      mojo::ApplicationImpl* passed_application_impl);
+    mojo::ApplicationImpl* passed_application_impl);
+extern void Mojo_SetEventDispatcher(
+    mojo::Binding<mojo::NativeViewportEventDispatcher>* dispatcher_binding);
 extern void Mojo_GetContextProvider(mojo::ContextProviderPtr* context_provider);
 extern void Mojo_OnMetricsChanged(mojo::ViewportMetricsPtr metrics);
 extern int Mojo_GetWindowId();

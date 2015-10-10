@@ -37,6 +37,7 @@ namespace sdl {
 
 /* TODO(jaween): Support multiple viewports */
 static mojo::ApplicationImpl* application_impl;
+static mojo::Binding<mojo::NativeViewportEventDispatcher>* dispatcher_binding;
 static mojo::NativeViewportPtr viewport;
 static int window_id;
 
@@ -48,6 +49,11 @@ Mojo_CreateWindow(_THIS, SDL_Window * window)
 
     /* Sets up synchronous Mojo interface calls */
     viewport.Bind(viewport.PassInterface(), &internal::kSdlAsyncWaiter);
+
+    /* Sets up event dispatching */
+    mojo::NativeViewportEventDispatcherPtr ptr;
+    dispatcher_binding->Bind(GetProxy(&ptr));
+    viewport->SetEventDispatcher(ptr.Pass());
 
     mojo::SizePtr size(mojo::Size::New());
 
@@ -91,6 +97,14 @@ void
 Mojo_SetApplicationImpl(mojo::ApplicationImpl* passed_application_impl)
 {
     application_impl = passed_application_impl;
+}
+
+void
+Mojo_SetEventDispatcher(
+    mojo::Binding<mojo::NativeViewportEventDispatcher>*
+    passed_dispatcher_binding)
+{
+    dispatcher_binding = passed_dispatcher_binding;
 }
 
 void
