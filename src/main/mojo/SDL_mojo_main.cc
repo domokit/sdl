@@ -49,9 +49,7 @@ SdlAppDelegate::OnEvent(mojo::EventPtr event,
                   const mojo::Callback<void()>& callback)
 {
     assert(event);
-    if (event->pointer_data.get()) {
-        Mojo_HandleInputEvent(*event);
-    }
+    Mojo_HandleInputEvent(*event);
     callback.Run();
 }
 

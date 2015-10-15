@@ -22,7 +22,11 @@
 
 #if SDL_VIDEO_DRIVER_MOJO
 
+extern "C" {
 #include "../../events/SDL_events_c.h"
+#include "../../events/SDL_keyboard_c.h"
+}
+
 #include "../../events/SDL_sysevents.h"
 #include "SDL.h"
 
@@ -70,12 +74,16 @@ Mojo_PumpEvents(_THIS)
                         event->button.which, event->button.state,
                         event->button.button);
                 break;
-            case SDL_MOUSEMOTION:
-                bool relative_coords = false;
+            case SDL_MOUSEMOTION: {
+                const bool relative_coords = false;
                 SDL_SendMouseMotion(
                         SDL_GetWindowFromID(event->motion.windowID),
                         event->motion.which, relative_coords, event->motion.x,
                         event->motion.y);
+                } break;
+            case SDL_KEYUP:
+            case SDL_KEYDOWN:
+                SDL_SendKeyboardKey(event->key.state, event->key.keysym.scancode);
                 break;
         }
         Mojo_RelinquishEvent(event);
