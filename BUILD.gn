@@ -125,6 +125,6 @@ static_library("sdl") {
     "//mojo/public/cpp/bindings",
     "//mojo/public/cpp/environment",
     "//mojo/public/cpp/utility",
-    "//mojo/services/native_viewport/public/interfaces",
+    "//mojo/services/native_viewport/interfaces",
   ]
 }
