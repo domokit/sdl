@@ -327,6 +327,10 @@ Mojo_HandleInputEvent(const mojo::Event& mojo_event)
     switch (mojo_event.action) {
         case mojo::EventType::KEY_PRESSED:
         case mojo::EventType::KEY_RELEASED:
+            if (mojo_event.key_data->is_char) {
+              // drop char events, keep keypress events
+              return;
+            }
             event->type = (mojo_event.action == mojo::EventType::KEY_PRESSED) ?
                 SDL_KEYDOWN : SDL_KEYUP;
             event->key.windowID = Mojo_GetWindowId();
