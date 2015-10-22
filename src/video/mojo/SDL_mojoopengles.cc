@@ -32,7 +32,6 @@
 
 #include "base/logging.h"
 #include "mojo/public/c/system/main.h"
-#include "mojo/services/native_viewport/public/interfaces/native_viewport.mojom.h"
 
 namespace sdl {
 

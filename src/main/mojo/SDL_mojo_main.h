@@ -28,7 +28,7 @@
 #include "mojo/public/cpp/application/application_impl.h"
 #include "mojo/public/cpp/application/application_runner.h"
 #include "mojo/public/cpp/application/interface_factory.h"
-#include "mojo/services/native_viewport/public/interfaces/native_viewport.mojom.h"
+#include "mojo/services/native_viewport/interfaces/native_viewport.mojom.h"
 
 namespace sdl {
 

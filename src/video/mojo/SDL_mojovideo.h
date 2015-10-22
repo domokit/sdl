@@ -29,7 +29,7 @@
 #include "../../main/mojo/SDL_mojo_main.h"
 #include "SDL_mojowindow.h"
 
-#include "mojo/services/native_viewport/public/interfaces/native_viewport.mojom.h"
+#include "mojo/services/native_viewport/interfaces/native_viewport.mojom.h"
 
 namespace sdl {
 

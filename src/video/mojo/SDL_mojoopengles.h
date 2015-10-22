@@ -28,7 +28,7 @@
 #include "mojo/common/binding_set.h"
 #include "mojo/public/c/gpu/MGL/mgl.h"
 #include "mojo/public/c/gpu/MGL/mgl_onscreen.h"
-#include "mojo/services/native_viewport/public/interfaces/native_viewport.mojom.h"
+#include "mojo/services/native_viewport/interfaces/native_viewport.mojom.h"
 
 namespace sdl {
 

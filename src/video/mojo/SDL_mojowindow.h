@@ -26,7 +26,7 @@
 #include "../SDL_sysvideo.h"
 
 #include "mojo/common/binding_set.h"
-#include "mojo/services/native_viewport/public/interfaces/native_viewport.mojom.h"
+#include "mojo/services/native_viewport/interfaces/native_viewport.mojom.h"
 
 namespace sdl {
 
